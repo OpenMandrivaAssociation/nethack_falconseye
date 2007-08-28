@@ -83,7 +83,6 @@ cp *.6 $RPM_BUILD_ROOT/%{_mandir}/man6
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications
 cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
-Encoding=UTF-8
 Name=NetHack Falcons Eye
 Comment=NetHack Falcons Eye
 Exec=%{_gamesbindir}/nethack
