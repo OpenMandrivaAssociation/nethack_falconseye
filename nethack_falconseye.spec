@@ -90,7 +90,7 @@ Icon=%{name}
 Terminal=false
 Type=Applications
 StartupNotify=true
-Categories=Games;RolePlaying;X-MandrivaLinux-MoreApplications-Games-Adventure
+Categories=Games;RolePlaying;X-MandrivaLinux-MoreApplications-Games-Adventure;
 EOF
 
 mkdir -p $RPM_BUILD_ROOT/%{_miconsdir}
