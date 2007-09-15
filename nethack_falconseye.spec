@@ -1,6 +1,6 @@
 ##### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #####
-##### Contact me (gc@mandrakesoft.com) if you want to change
+##### Contact me (gc) if you want to change
 ##### source version of this package, as there are a couple
 ##### of in-game checks to perform for validation.
 #####
