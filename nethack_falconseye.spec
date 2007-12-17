@@ -25,7 +25,6 @@ Patch0: nethack_falconseye-331_jtp_19-make-it-work.patch
 URL: http://www.hut.fi/~jtpelto2/nethack.html
 BuildRequires: byacc flex tetex-latex tetex-dvips
 BuildRequires: libSDL-devel libxaw-devel ncurses-devel popt-devel 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 # Author: jaakko.peltonen@hut.fi
 
 %description
