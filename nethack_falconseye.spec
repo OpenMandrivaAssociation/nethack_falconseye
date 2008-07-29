@@ -9,7 +9,7 @@
 
 %define name nethack_falconseye
 %define version 3.3.1_jtp_1.9.3
-%define release %mkrel 1
+%define release %mkrel 3
 
 Name: %{name}
 Summary: Graphical role-playing game based on nethack
