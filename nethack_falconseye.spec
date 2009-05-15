@@ -9,7 +9,9 @@
 
 %define name nethack_falconseye
 %define version 3.3.1_jtp_1.9.3
-%define release %mkrel 3
+%define release %mkrel 4
+
+%define iconname nethackfalconseye
 
 Name: %{name}
 Summary: Graphical role-playing game based on nethack
@@ -22,6 +24,7 @@ Source10: nethack.16.png
 Source11: nethack.32.png
 Source12: nethack.48.png
 Patch0: nethack_falconseye-331_jtp_19-make-it-work.patch
+Patch1:	nethack_falconseye-3.3.1-fix-str-fmt.patch
 URL: http://www.hut.fi/~jtpelto2/nethack.html
 BuildRequires: byacc flex tetex-latex tetex-dvips
 BuildRequires: libSDL-devel libxaw-devel ncurses-devel popt-devel 
@@ -45,6 +48,7 @@ gameplay and game features.
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p1 -b .str-fmt
 
 %build
 pushd sys/unix
@@ -81,23 +85,24 @@ rm -f recover.6
 cp *.6 $RPM_BUILD_ROOT/%{_mandir}/man6
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications
+# (stormi) Terminal=true required otherwise the game crashes
 cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=NetHack Falcons Eye
 Comment=NetHack Falcons Eye
 Exec=%{_gamesbindir}/nethack
-Icon=%{name}
-Terminal=false
-Type=Applications
+Icon=%{iconname}
+Terminal=true
+Type=Application
 StartupNotify=true
-Categories=Games;RolePlaying;X-MandrivaLinux-MoreApplications-Games-Adventure;
+Categories=Game;RolePlaying;AdventureGame;X-MandrivaLinux-MoreApplications-Games-Adventure;
 EOF
 
 mkdir -p $RPM_BUILD_ROOT/%{_miconsdir}
 mkdir -p $RPM_BUILD_ROOT/%{_liconsdir}
-cp %{SOURCE10} $RPM_BUILD_ROOT/%{_miconsdir}
-cp %{SOURCE11} $RPM_BUILD_ROOT/%{_iconsdir}
-cp %{SOURCE12} $RPM_BUILD_ROOT/%{_liconsdir}
+cp %{SOURCE10} $RPM_BUILD_ROOT/%{_miconsdir}/%{iconname}.png
+cp %{SOURCE11} $RPM_BUILD_ROOT/%{_iconsdir}/%{iconname}.png
+cp %{SOURCE12} $RPM_BUILD_ROOT/%{_liconsdir}/%{iconname}.png
 
 %clean
 rm -rf $RPM_BUILD_ROOT
