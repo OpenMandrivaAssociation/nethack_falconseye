@@ -9,7 +9,7 @@
 
 %define name nethack_falconseye
 %define version 3.3.1_jtp_1.9.3
-%define release %mkrel 5
+%define release %mkrel 6
 
 %define iconname nethackfalconseye
 
@@ -67,14 +67,14 @@ mkdir -p $RPM_BUILD_ROOT/%{_gamesbindir}
 
 cp -a compiled/games/lib/nethackdir/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 rm -rf $RPM_BUILD_ROOT/%{_libdir}/%{name}/manual
-cp compiled/games/nethack $RPM_BUILD_ROOT/%{_gamesbindir}
+cp compiled/games/nethack $RPM_BUILD_ROOT/%{_gamesbindir}/nethack_falconseye
 cp util/lev_comp util/dgn_comp $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
 find $RPM_BUILD_ROOT/%{_libdir}/* -type d -exec chmod 755 {} \;
 chmod -s $RPM_BUILD_ROOT/%{_libdir}/%{name}/nethack
-perl -pi -e 's|^HACKDIR=.*|HACKDIR=%{_libdir}/%{name}|' $RPM_BUILD_ROOT/%{_gamesbindir}/nethack
+perl -pi -e 's|^HACKDIR=.*|HACKDIR=%{_libdir}/%{name}|' $RPM_BUILD_ROOT/%{_gamesbindir}/nethack_falconseye
 perl -pi -e 's|^fi|fi\nexport NETHACKOPTIONS="windowtype=jtp,time,noshowexp,number_pad,lit_corridor,rest_on_space"|' \
-		$RPM_BUILD_ROOT/%{_gamesbindir}/nethack
+		$RPM_BUILD_ROOT/%{_gamesbindir}/nethack_falconseye
 perl -pi -e 's|^fullscreen=.*|fullscreen=1|' $RPM_BUILD_ROOT/%{_libdir}/%{name}/config/jtp_opts.txt
 
 cd doc
@@ -83,6 +83,7 @@ dvips Guidebook.dvi -o Guidebook.ps
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man6
 rm -f recover.6
 cp *.6 $RPM_BUILD_ROOT/%{_mandir}/man6
+mv $RPM_BUILD_ROOT/%{_mandir}/man6/nethack.6 $RPM_BUILD_ROOT/%{_mandir}/man6/nethack_falconseye.6
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications
 # (stormi) Terminal=true required otherwise the game crashes
@@ -90,7 +91,7 @@ cat > $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=NetHack Falcons Eye
 Comment=NetHack Falcons Eye
-Exec=%{_gamesbindir}/nethack
+Exec=%{_gamesbindir}/nethack_falconseye
 Icon=%{iconname}
 Terminal=true
 Type=Application
@@ -127,5 +128,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_miconsdir}/*.png
 %{_iconsdir}/*.png
 %{_liconsdir}/*.png
-
-
