@@ -1,0 +1,1045 @@
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/apply.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/apply.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/apply.c	2009-05-15 18:49:56.000000000 +0200
+@@ -58,7 +58,7 @@
+ 	if(!getdir((char *)0)) return(0);
+ 
+ 	if (obj->spe <= 0) {
+-		pline(nothing_happens);
++		pline("%s", nothing_happens);
+ 		return (1);
+ 	}
+ 	obj->spe--;
+@@ -792,7 +792,7 @@
+ 		if (!obj->cursed)
+ 		    (void) openit();
+ 		else
+-		    pline(nothing_happens);
++		    pline("%s", nothing_happens);
+ 
+ 	    } else if (obj->cursed) {
+ 		coord mm;
+@@ -824,7 +824,7 @@
+ 		}
+ 		res += openit();
+ 		switch (res) {
+-		  case 0:  pline(nothing_happens); break;
++		  case 0:  pline("%s", nothing_happens); break;
+ 		  case 1:  pline("%s opens...", Something);
+ 			   learno = TRUE; break;
+ 		  default: pline("Things open around you...");
+@@ -836,7 +836,7 @@
+ 		amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
+ #endif
+ 		if (findit() != 0) learno = TRUE;
+-		else pline(nothing_happens);
++		else pline("%s", nothing_happens);
+ 	    }
+ 
+ 	}	/* charged BofO */
+@@ -910,7 +910,7 @@
+ 	char qbuf[QBUFSZ];
+ 
+ 	if(u.uswallow) {
+-		You(no_elbow_room);
++		You("%s", no_elbow_room);
+ 		return;
+ 	}
+ 	if(Underwater) {
+@@ -1071,7 +1071,7 @@
+ 	char buf[BUFSZ];
+ 
+ 	if (u.uswallow) {
+-	    You(no_elbow_room);
++	    You("%s", no_elbow_room);
+ 	    return;
+ 	}
+ 
+@@ -1135,12 +1135,12 @@
+ 		if (uwep->lamplit) begin_burn(uwep, TRUE);
+ 	    } else if (rn2(2) && !Blind)
+ 		You("see a puff of smoke.");
+-	    else pline(nothing_happens);
++	    else pline("%s", nothing_happens);
+ 	} else if (obj->otyp == BRASS_LANTERN) {
+ 	    /* message from Adventure */
+ 	    pline("Rubbing the electric lamp is not particularly rewarding.");
+ 	    pline("Anyway, nothing exciting happens.");
+-	} else pline(nothing_happens);
++	} else pline("%s", nothing_happens);
+ 	return 1;
+ }
+ 
+@@ -1450,7 +1450,7 @@
+ 	}
+ 
+ 	if (trouble_count == 0) {
+-	    pline(nothing_happens);
++	    pline("%s", nothing_happens);
+ 	    return;
+ 	} else if (trouble_count > 1) {		/* shuffle */
+ 	    int i, j, k;
+@@ -1923,7 +1923,7 @@
+ 		You("wrap your bullwhip around %s on the %s.",
+ 		    an(singular(otmp, xname)), surface(u.ux, u.uy));
+ 		if (rnl(6) || pickup_object(otmp, 1L, TRUE) < 1)
+-		    pline(msg_slipsfree);
++		    pline("%s", msg_slipsfree);
+ 		return 1;
+ 	    }
+ 	}
+@@ -1966,7 +1966,7 @@
+ 		wrapped_what = strcpy(buf, mon_nam(mtmp));
+ 	    } else if (proficient) {
+ 		if (attack(mtmp)) return 1;
+-		else pline(msg_snap);
++		else pline("%s", msg_snap);
+ 	    }
+ 	}
+ 	if (!wrapped_what) {
+@@ -1988,10 +1988,10 @@
+ 		    vision_full_recalc = 1;
+ 		}
+ 	    } else {
+-		pline(msg_slipsfree);
++		pline("%s", msg_slipsfree);
+ 	    }
+ 	    if (mtmp) wakeup(mtmp);
+-	} else pline(msg_snap);
++	} else pline("%s", msg_snap);
+ 
+     } else if (mtmp) {
+ 	if (!canspotmon(mtmp) &&
+@@ -2092,14 +2092,14 @@
+ 		    break;
+ 		}
+ 	    } else {
+-		pline(msg_slipsfree);
++		pline("%s", msg_slipsfree);
+ 	    }
+ 	    wakeup(mtmp);
+ 	} else {
+ 	    You("flick your bullwhip towards %s.", mon_nam(mtmp));
+ 	    if (proficient) {
+ 		if (attack(mtmp)) return 1;
+-		else pline(msg_snap);
++		else pline("%s", msg_snap);
+ 	    }
+ 	}
+ 
+@@ -2108,7 +2108,7 @@
+ 	    You("snap your whip through thin air.");
+ 
+     } else {
+-	pline(msg_snap);
++	pline("%s", msg_snap);
+ 
+     }
+     return 1;
+@@ -2132,7 +2132,7 @@
+ 
+ 	/* Are you allowed to use the pole? */
+ 	if (u.uswallow) {
+-	    pline(not_enough_room);
++	    pline("%s", not_enough_room);
+ 	    return (0);
+ 	}
+ 	if (obj != uwep) {
+@@ -2142,7 +2142,7 @@
+      /* assert(obj == uwep); */
+ 
+ 	/* Prompt for a location */
+-	pline(where_to_hit);
++	pline("%s", where_to_hit);
+ 	cc.x = u.ux;
+ 	cc.y = u.uy;
+ 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
+@@ -2160,7 +2160,7 @@
+ 	    pline("Too close!");
+ 	    return (res);
+ 	} else if (!cansee(cc.x, cc.y)) {
+-	    You(cant_see_spot);
++	    You("%s", cant_see_spot);
+ 	    return (res);
+ 	}
+ 
+@@ -2169,7 +2169,7 @@
+ 	    (void) thitmonst(mtmp, uwep);
+ 	else
+ 	    /* Now you know that nothing is there... */
+-	    pline(nothing_happens);
++	    pline("%s", nothing_happens);
+ 	return (1);
+ }
+ 
+@@ -2185,7 +2185,7 @@
+ 
+ 	/* Are you allowed to use the hook? */
+ 	if (u.uswallow) {
+-	    pline(not_enough_room);
++	    pline("%s", not_enough_room);
+ 	    return (0);
+ 	}
+ 	if (obj != uwep) {
+@@ -2195,7 +2195,7 @@
+      /* assert(obj == uwep); */
+ 
+ 	/* Prompt for a location */
+-	pline(where_to_hit);
++	pline("%s", where_to_hit);
+ 	cc.x = u.ux;
+ 	cc.y = u.uy;
+ 	if (getpos(&cc, TRUE, "the spot to hit") < 0)
+@@ -2210,7 +2210,7 @@
+ 		pline("Too far!");
+ 		return (res);
+ 	} else if (!cansee(cc.x, cc.y)) {
+-		You(cant_see_spot);
++		You("%s", cant_see_spot);
+ 		return (res);
+ 	}
+ 
+@@ -2256,7 +2256,7 @@
+ 	    }
+ 	    break;
+ 	}
+-	pline(nothing_happens);
++	pline("%s", nothing_happens);
+ 	return (1);
+ }
+ 
+@@ -2449,7 +2449,7 @@
+ 						u.ux, u.uy, NO_MM_FLAGS);
+ 			makeknown(BAG_OF_TRICKS);
+ 		} else
+-			pline(nothing_happens);
++			pline("%s", nothing_happens);
+ 		break;
+ 	case CAN_OF_GREASE:
+ 		use_grease(obj);
+@@ -2583,7 +2583,7 @@
+ 					       (const char *)0);
+ 		    makeknown(HORN_OF_PLENTY);
+ 		} else
+-		    pline(nothing_happens);
++		    pline("%s", nothing_happens);
+ 		break;
+ 	case LAND_MINE:
+ 	case BEARTRAP:
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/artifact.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/artifact.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/artifact.c	2009-05-15 19:01:13.000000000 +0200
+@@ -1094,7 +1094,7 @@
+ 	if(obj->otyp == CRYSTAL_BALL)
+ 	    use_crystal_ball(obj);
+ 	else
+-	    pline(nothing_happens);
++	    pline("%s", nothing_happens);
+ 	return 1;
+     }
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/botl.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/botl.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/botl.c	2009-05-15 19:05:19.000000000 +0200
+@@ -179,9 +179,9 @@
+ 			mbot[k] += 'A' - 'a';
+ 		    k++;
+ 		}
+-		Sprintf(nb = eos(nb), mbot);
++		Sprintf(nb = eos(nb), "%s", mbot);
+ 	} else
+-		Sprintf(nb = eos(nb), rank());
++		Sprintf(nb = eos(nb), "%s", rank());
+ 
+ 	Sprintf(nb = eos(nb),"  ");
+ 	i = mrank_sz + 15;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/cmd.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/cmd.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/cmd.c	2009-05-15 19:23:59.000000000 +0200
+@@ -1871,7 +1871,7 @@
+ 		    if (multi > 9) {
+ 			clear_nhwindow(WIN_MESSAGE);
+ 			Sprintf(in_line, "Count: %d", multi);
+-			pline(in_line);
++			pline("%s", in_line);
+ 			mark_synch();
+ 		    }
+ 		    last_multi = multi;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/detect.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/detect.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/detect.c	2009-05-15 19:28:05.000000000 +0200
+@@ -708,7 +708,7 @@
+     if (flags.verbose) You("may look for an object or monster symbol.");
+     ch = yn_function("What do you look for?", (char *)0, '\0');
+     if (index(quitchars,ch)) {
+-	if (flags.verbose) pline(Never_mind);
++	if (flags.verbose) pline("%s", Never_mind);
+ 	return;
+     }
+     You("peer into %s...", the(bname));
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/dig.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/dig.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/dig.c	2009-05-15 19:30:44.000000000 +0200
+@@ -331,7 +331,7 @@
+ 		    feel_location(dpx, dpy);
+ 		else
+ 		    newsym(dpx, dpy);
+-		if(digtxt) pline(digtxt);	/* after newsym */
++		if(digtxt) pline("%s", digtxt);	/* after newsym */
+ 		if(dmgtxt)
+ 		    pay_for_damage(dmgtxt);
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/do.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/do.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/do.c	2009-05-15 19:33:37.000000000 +0200
+@@ -1143,7 +1143,7 @@
+ 		mesg = halu_fam_msgs[which];
+ 	    else
+ 		mesg = fam_msgs[which];
+-	    if (mesg) pline(mesg);
++	    if (mesg) pline("%s", mesg);
+ 	}
+ 
+ #ifdef REINCARNATION
+@@ -1290,7 +1290,7 @@
+ 	    int typmask = u.utotype; /* save it; goto_level zeroes u.utotype */
+ 
+ 	    assign_level(&dest, &u.utolev);
+-	    if (dfr_pre_msg) pline(dfr_pre_msg);
++	    if (dfr_pre_msg) pline("%s", dfr_pre_msg);
+ 	    goto_level(&dest, !!(typmask&1), !!(typmask&2), !!(typmask&4));
+ 	    if (typmask & 0200) {	/* remove portal */
+ 		struct trap *t = t_at(u.ux, u.uy);
+@@ -1300,7 +1300,7 @@
+ 		    newsym(u.ux, u.uy);
+ 		}
+ 	    }
+-	    if (dfr_post_msg) pline(dfr_post_msg);
++	    if (dfr_post_msg) pline("%s", dfr_post_msg);
+ 	}
+ 	u.utotype = 0;		/* our caller keys off of this */
+ 	if (dfr_pre_msg)
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/dungeon.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/dungeon.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/dungeon.c	2009-05-15 19:35:21.000000000 +0200
+@@ -656,7 +656,7 @@
+ # endif
+ 	    Strcat(tbuf, "\" file!");
+ #endif
+-	    panic(tbuf);
++	    panic("%s", tbuf);
+ 	}
+ 
+ 	/* validate the data's version against the program's version */
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/eat.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/eat.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/eat.c	2009-05-15 19:37:42.000000000 +0200
+@@ -407,7 +407,7 @@
+ 	occupation = 0; /* do this early, so newuhs() knows we're done */
+ 	newuhs(FALSE);
+ 	if (nomovemsg) {
+-		if (message) pline(nomovemsg);
++		if (message) pline("%s", nomovemsg);
+ 		nomovemsg = 0;
+ 	} else if (message)
+ 		You("finish eating %s.", food_xname(victual.piece, TRUE));
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/engrave.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/engrave.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/engrave.c	2009-05-15 19:40:25.000000000 +0200
+@@ -865,7 +865,7 @@
+ 		c = yn_function("Do you want to add to the current engraving?",
+ 				ynqchars, 'y');
+ 		if (c == 'q') {
+-		    pline(Never_mind);
++		    pline("%s", Never_mind);
+ 		    return(0);
+ 		}
+ 	    }
+@@ -962,7 +962,7 @@
+ 		    pline("%s glows, then fades.", The(xname(otmp)));
+ 		return(1);
+ 	    } else {
+-		pline(Never_mind);
++		pline("%s", Never_mind);
+ 		return(0);
+ 	    }
+ 	}
+@@ -1062,7 +1062,7 @@
+ 
+ 	make_engr_at(u.ux, u.uy, buf, (moves - multi), type);
+ 
+-	if (post_engr_text[0]) pline(post_engr_text);
++	if (post_engr_text[0]) pline("%s", post_engr_text);
+ 
+ 	if (doblind && !resists_blnd(&youmonst)) {
+ 	    You("are blinded by the flash!");
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/hack.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/hack.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/hack.c	2009-05-15 19:45:19.000000000 +0200
+@@ -404,7 +404,7 @@
+ 
+     unblock_point(x, y);	/* vision */
+     newsym(x, y);
+-    if (digtxt) You(digtxt);	/* after newsym */
++    if (digtxt) You("%s", digtxt);	/* after newsym */
+     if (dmgtxt) pay_for_damage(dmgtxt);
+     (void) memset((genericptr_t)&digging, 0, sizeof digging);
+     return 0;
+@@ -1631,7 +1631,7 @@
+ 	multi = 0;	/* caller will usually have done this already */
+ 	if (msg_override) nomovemsg = msg_override;
+ 	else if (!nomovemsg) nomovemsg = You_can_move_again;
+-	if (*nomovemsg) pline(nomovemsg);
++	if (*nomovemsg) pline("%s", nomovemsg);
+ 	nomovemsg = 0;
+ 	u.usleep = 0;
+ 	if (afternmv) (*afternmv)();
+@@ -1799,7 +1799,7 @@
+ {
+     if(near_capacity() >= EXT_ENCUMBER) {
+ 	if(str)
+-	    pline(str);
++	    pline("%s", str);
+ 	else
+ 	    You_cant("do that while carrying so much stuff.");
+ 	return 1;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/invent.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/invent.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/invent.c	2009-05-15 19:47:32.000000000 +0200
+@@ -829,7 +829,7 @@
+ 		}
+ 		if(index(quitchars,ilet)) {
+ 		    if(flags.verbose)
+-			pline(Never_mind);
++			pline("%s", Never_mind);
+ 		    return((struct obj *)0);
+ 		}
+ 		if(ilet == '-') {
+@@ -879,7 +879,7 @@
+ 		    if(!ilet) continue;
+ 		    if(ilet == '\033') {
+ 			if(flags.verbose)
+-			    pline(Never_mind);
++			    pline("%s", Never_mind);
+ 			return((struct obj *)0);
+ 		    }
+ 		    /* they typed a letter (not a space) at the prompt */
+@@ -1840,7 +1840,7 @@
+ 		Sprintf(fbuf, "There is %s here.", an(dfeature));
+ 
+ 	if (!otmp || is_lava(u.ux,u.uy) || (is_pool(u.ux,u.uy) && !Underwater)) {
+-		if (dfeature) pline(fbuf);
++		if (dfeature) pline("%s", fbuf);
+ 		read_engr_at(u.ux, u.uy); /* Eric Backus */
+ 		if (!skip_objects && (Blind || !dfeature))
+ 		    You("%s no objects here.", verb);
+@@ -1849,14 +1849,14 @@
+ 	/* we know there is something here */
+ 
+ 	if (skip_objects) {
+-	    if (dfeature) pline(fbuf);
++	    if (dfeature) pline("%s", fbuf);
+ 	    read_engr_at(u.ux, u.uy); /* Eric Backus */
+ 	    There("are %s%s objects here.",
+ 		  (obj_cnt <= 10) ? "several" : "many",
+ 		  picked_some ? " more" : "");
+ 	} else if (!otmp->nexthere) {
+ 	    /* only one object */
+-	    if (dfeature) pline(fbuf);
++	    if (dfeature) pline("%s", fbuf);
+ 	    read_engr_at(u.ux, u.uy); /* Eric Backus */
+ #ifdef INVISIBLE_OBJECTS
+ 	    if (otmp->oinvis && !See_invisible) verb = "feel";
+@@ -2274,7 +2274,7 @@
+ 		Sprintf(qbuf, "Adjust letter to what [%s]?",buf);
+ 		let = yn_function(qbuf, (char *)0, '\0');
+ 		if(index(quitchars,let)) {
+-			pline(Never_mind);
++			pline("%s", Never_mind);
+ 			return(0);
+ 		}
+ 		if (let == '@' || !letter(let))
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/lock.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/lock.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/lock.c	2009-05-15 19:48:56.000000000 +0200
+@@ -853,7 +853,7 @@
+ 	default: impossible("magic (%d) attempted on door.", otmp->otyp);
+ 	    break;
+ 	}
+-	if (msg && cansee(x,y)) pline(msg);
++	if (msg && cansee(x,y)) pline("%s", msg);
+ 	if (loudness > 0) {
+ 	    /* door was destroyed */
+ 	    wake_nearto(x, y, loudness);
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/mail.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/mail.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/mail.c	2009-05-15 19:50:01.000000000 +0200
+@@ -317,7 +317,7 @@
+ 	if (fx == tx && fy == ty) break;
+ 
+ 	if ((mon = m_at(fx,fy)) != 0)	/* save monster at this position */
+-	    verbalize(md_exclamations());
++	    verbalize("%s", md_exclamations());
+ 	else if (fx == u.ux && fy == u.uy)
+ 	    verbalize("Excuse me.");
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/muse.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/muse.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/muse.c	2009-05-15 19:51:35.000000000 +0200
+@@ -76,7 +76,7 @@
+ 		    m_useup(mon, obj);
+ 		    mtmp = makemon(&mons[PM_GHOST], cc.x, cc.y, NO_MM_FLAGS);
+ 		    if (!mtmp) {
+-			if (vis) pline(empty);
++			if (vis) pline("%s", empty);
+ 		    } else {
+ 			if (vis) {
+ 			    pline("As %s opens the bottle, an enormous %s emerges!",
+@@ -99,7 +99,7 @@
+ 		m_useup(mon, obj);
+ 		mtmp = makemon(&mons[PM_DJINNI], cc.x, cc.y, NO_MM_FLAGS);
+ 		if (!mtmp) {
+-		    if (vis) pline(empty);
++		    if (vis) pline("%s", empty);
+ 		} else {
+ 		    if (vis)
+ 			pline("In a cloud of smoke, %s emerges!",
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/pickup.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/pickup.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/pickup.c	2009-05-15 19:53:35.000000000 +0200
+@@ -1328,7 +1328,7 @@
+      */
+     if (c != 'y' && mon_beside(u.ux, u.uy)) {
+ 	if (!getdir("Loot in what direction?")) {
+-	    pline(Never_mind);
++	    pline("%s", Never_mind);
+ 	    return(0);
+ 	}
+ 	x = u.ux + u.dx;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/polyself.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/polyself.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/polyself.c	2009-05-15 19:55:06.000000000 +0200
+@@ -216,7 +216,7 @@
+ 
+ 	if(!Polymorph_control && !draconian && !iswere && !isvamp) {
+ 	    if (rn2(20) > ACURR(A_CON)) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		losehp(rnd(30), "system shock", KILLED_BY_AN);
+ 		exercise(A_CON, FALSE);
+ 		return;
+@@ -238,7 +238,7 @@
+ 				You("cannot polymorph into that.");
+ 			else break;
+ 		} while(++tries < 5);
+-		if (tries==5) pline(thats_enough_tries);
++		if (tries==5) pline("%s", thats_enough_tries);
+ 		/* allow skin merging, even when polymorph is controlled */
+ 		if (draconian &&
+ 		    (mntmp == armor_to_dragon(uarm->otyp) || tries == 5))
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/potion.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/potion.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/potion.c	2009-05-15 20:03:20.000000000 +0200
+@@ -228,7 +228,7 @@
+ 		see_traps();
+ 	    }
+ 	    flags.botl = 1;
+-	    if (!Blind && talk) pline(message);
++	    if (!Blind && talk) pline("%s", message);
+ 	}
+ }
+ 
+@@ -833,7 +833,7 @@
+ 		You("have a %s feeling for a moment, then it passes.",
+ 		Hallucination ? "normal" : "strange");
+ 	else
+-		pline(txt);
++		pline("%s", txt);
+ 
+ 	if(!obj)	/* e.g., crystal ball finds no traps */
+ 		return;
+@@ -1502,7 +1502,7 @@
+ 		    obj->otyp == SPE_POLYMORPH ||
+ 		    obj_resists(obj->otyp == POT_POLYMORPH ?
+ 				potion : obj, 5, 95)) {
+-		pline(nothing_happens);
++		pline("%s", nothing_happens);
+ 	    } else {
+ 		/* KMH, conduct */
+ 		u.uconduct.polypiles++;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/pray.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/pray.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/pray.c	2009-05-15 20:06:17.000000000 +0200
+@@ -1145,7 +1145,7 @@
+     } /* fake Amulet */
+ 
+     if (value == 0) {
+-	pline(nothing_happens);
++	pline("%s", nothing_happens);
+ 	return (1);
+     }
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/priest.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/priest.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/priest.c	2009-05-15 20:09:05.000000000 +0200
+@@ -363,8 +363,8 @@
+ 		    msg1 = buf;
+ 		}
+ 		if (can_speak) {
+-		    verbalize(msg1);
+-		    if (msg2) verbalize(msg2);
++		    verbalize("%s", msg1);
++		    if (msg2) verbalize("%s", msg2);
+ 		}
+ 		if(!sanctum) {
+ 		    /* !tended -> !shrined */
+@@ -432,7 +432,7 @@
+ 		priest->mcanmove = 1;
+ 	    }
+ 	    priest->mpeaceful = 0;
+-	    verbalize(cranky_msg[rn2(3)]);
++	    verbalize("%s", cranky_msg[rn2(3)]);
+ 	    return;
+ 	}
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/questpgr.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/questpgr.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/questpgr.c	2009-05-15 20:10:42.000000000 +0200
+@@ -373,7 +373,7 @@
+ 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
+ 	    (void) dlb_fgets(in_line, 80, msg_file);
+ 	    convert_line();
+-	    pline(out_line);
++	    pline("%s", out_line);
+ 	}
+ 
+ }
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/read.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/read.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/read.c	2009-05-15 20:14:43.000000000 +0200
+@@ -152,14 +152,14 @@
+ stripspe(obj)
+ register struct obj *obj;
+ {
+-	if (obj->blessed) pline(nothing_happens);
++	if (obj->blessed) pline("%s", nothing_happens);
+ 	else {
+ 		if (obj->spe > 0) {
+ 		    obj->spe = 0;
+ 		    if (obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN)
+ 			obj->age = 0;
+ 		    Your("%s vibrates briefly.",xname(obj));
+-		} else pline(nothing_happens);
++		} else pline("%s", nothing_happens);
+ 	}
+ }
+ 
+@@ -315,7 +315,7 @@
+ 		    if (obj->spe < 3)
+ 			Your("marker seems permanently dried out.");
+ 		    else
+-			pline(nothing_happens);
++			pline("%s", nothing_happens);
+ 		} else if (is_blessed) {
+ 		    n = rn1(10,16);		/* 10..25 */
+ 		    if (obj->spe + n <= 50)
+@@ -373,7 +373,7 @@
+ 		    if (obj->spe < 5) {
+ 			obj->spe++;
+ 			p_glow1(obj);
+-		    } else pline(nothing_happens);
++		    } else pline("%s", nothing_happens);
+ 		}
+ 		break;
+ 	    case HORN_OF_PLENTY:
+@@ -1224,7 +1224,7 @@
+ 		cc.x = u.ux;
+ 		cc.y = u.uy;
+ 		if (getpos(&cc, TRUE, "the desired position") < 0) {
+-		    pline(Never_mind);
++		    pline("%s", Never_mind);
+ 		    return 0;
+ 		}
+ 		if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
+@@ -1368,7 +1368,7 @@
+ 
+ 	for(j=0; ; j++) {
+ 		if (j >= 5) {
+-			pline(thats_enough_tries);
++			pline("%s", thats_enough_tries);
+ 			return;
+ 		}
+ 		do {
+@@ -1520,7 +1520,7 @@
+ 	} else {
+ 	    for(i = 0; ; i++) {
+ 		if(i >= 5) {
+-		    pline(thats_enough_tries);
++		    pline("%s", thats_enough_tries);
+ 		    return;
+ 		}
+ 		getlin("What monster do you want to genocide? [type the name]",
+@@ -1626,7 +1626,7 @@
+ 	    if (cnt)
+ 		pline("Sent in some %s.", makeplural(buf));
+ 	    else
+-		pline(nothing_happens);
++		pline("%s", nothing_happens);
+ 	}
+ }
+ 
+@@ -1710,7 +1710,7 @@
+ 	    if (which < LOW_PM) pline("I've never heard of such monsters.");
+ 	    else break;
+ 	} while (++tries < 5);
+-	if (tries == 5) pline(thats_enough_tries);
++	if (tries == 5) pline("%s", thats_enough_tries);
+ 	else {
+ 	    (void) cant_create(&which, FALSE);
+ 	    return((boolean)(makemon(&mons[which],
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/region.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/region.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/region.c	2009-05-15 20:16:30.000000000 +0200
+@@ -439,7 +439,7 @@
+ 		!regions[i]->attach_2_u && !inside_region(regions[i], x, y)) {
+ 	    regions[i]->player_inside = FALSE;
+ 	    if (regions[i]->leave_msg != NULL)
+-		pline(regions[i]->leave_msg);
++		pline("%s", regions[i]->leave_msg);
+ 	    if ((f_indx = regions[i]->leave_f) != NO_CALLBACK)
+ 		(void) (*callbacks[f_indx])(regions[i], (genericptr_t) 0);
+ 	}
+@@ -450,7 +450,7 @@
+ 		!regions[i]->attach_2_u && inside_region(regions[i], x, y)) {
+ 	    regions[i]->player_inside = TRUE;
+ 	    if (regions[i]->enter_msg != NULL)
+-		pline(regions[i]->enter_msg);
++		pline("%s", regions[i]->enter_msg);
+ 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
+ 		(void) (*callbacks[f_indx])(regions[i], (genericptr_t) 0);
+ 	}
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/shk.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/shk.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/shk.c	2009-05-15 20:18:15.000000000 +0200
+@@ -1122,7 +1122,7 @@
+ 		    else Strcat(sbuf,
+ 			   "for gold picked up and the use of merchandise.");
+ 		} else Strcat(sbuf, "for the use of merchandise.");
+-		pline(sbuf);
++		pline("%s", sbuf);
+ 		if (u.ugold + eshkp->credit < dtmp) {
+ 		    pline("But you don't%s have enough gold%s.",
+ 			stashed_gold ? " seem to" : "",
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/sounds.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/sounds.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/sounds.c	2009-05-15 20:21:36.000000000 +0200
+@@ -48,7 +48,7 @@
+ 		"the splashing of a naiad.",
+ 		"a soda fountain!",
+ 	};
+-	You_hear(fountain_msg[rn2(3)+hallu]);
++	You_hear("%s", fountain_msg[rn2(3)+hallu]);
+     }
+ #ifdef SINK
+     if (level.flags.nsinks && !rn2(300)) {
+@@ -57,7 +57,7 @@
+ 		"a gurgling noise.",
+ 		"dishes being washed!",
+ 	};
+-	You_hear(sink_msg[rn2(2)+hallu]);
++	You_hear("%s", sink_msg[rn2(2)+hallu]);
+     }
+ #endif
+     if (level.flags.has_court && !rn2(200)) {
+@@ -76,7 +76,7 @@
+ 		/* finding one is enough, at least for now */
+ 		int which = rn2(3)+hallu;
+ 
+-		if (which != 2) You_hear(throne_msg[which]);
++		if (which != 2) You_hear("%s", throne_msg[which]);
+ 		else		pline(throne_msg[2], his[flags.female]);
+ 		return;
+ 	    }
+@@ -88,7 +88,7 @@
+ 		"smell marsh gas!",	/* so it's a smell...*/
+ 		"hear Donald Duck!",
+ 	};
+-	You(swamp_msg[rn2(2)+hallu]);
++	You("%s", swamp_msg[rn2(2)+hallu]);
+ 	return;
+     }
+     if (level.flags.has_vault && !rn2(200)) {
+@@ -196,7 +196,7 @@
+ 		mon_in_room(mtmp, BARRACKS) &&
+ 		/* sleeping implies not-yet-disturbed (usually) */
+ 		(mtmp->msleeping || ++count > 5)) {
+-		You_hear(barracks_msg[rn2(3)+hallu]);
++		You_hear("%s", barracks_msg[rn2(3)+hallu]);
+ 		return;
+ 	    }
+ 	}
+@@ -211,7 +211,7 @@
+ 	    if (DEADMONSTER(mtmp)) continue;
+ 	    if ((mtmp->msleeping || is_animal(mtmp->data)) &&
+ 		    mon_in_room(mtmp, ZOO)) {
+-		You_hear(zoo_msg[rn2(2)+hallu]);
++		You_hear("%s", zoo_msg[rn2(2)+hallu]);
+ 		return;
+ 	    }
+ 	}
+@@ -229,7 +229,7 @@
+ 		    "the chime of a cash register.",
+ 		    "Neiman and Marcus arguing!",
+ 	    };
+-	    You_hear(shop_msg[rn2(2)+hallu]);
++	    You_hear("%s", shop_msg[rn2(2)+hallu]);
+ 	}
+ 	return;
+     }
+@@ -247,7 +247,7 @@
+ 		    "someone say \"No more woodchucks!\"",
+ 		    "a loud ZOT!"		/* both rec.humor.oracle */
+ 	    };
+-	    You_hear(ora_msg[rn2(3)+hallu*2]);
++	    You_hear("%s", ora_msg[rn2(3)+hallu*2]);
+ 	}
+ 	return;
+     }
+@@ -794,7 +794,7 @@
+     }
+ 
+     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);
+-    else if (verbl_msg) verbalize(verbl_msg);
++    else if (verbl_msg) verbalize("%s", verbl_msg);
+     return(1);
+ }
+ 
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/spell.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/spell.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/spell.c	2009-05-15 20:23:55.000000000 +0200
+@@ -851,7 +851,7 @@
+ 		break;
+ 	case SPE_JUMPING:
+ 		if (!jump(max(role_skill,1)))
+-			pline(nothing_happens);
++			pline("%s", nothing_happens);
+ 		break;
+ 	default:
+ 		impossible("Unknown spell %d attempted.", spell);
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/steed.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/steed.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/steed.c	2009-05-15 20:25:41.000000000 +0200
+@@ -50,7 +50,7 @@
+ 
+ 	/* Select an animal */
+ 	if (u.uswallow || Underwater || !getdir((char *)0)) {
+-	    pline(Never_mind);
++	    pline("%s", Never_mind);
+ 	    return 0;
+ 	}
+ 	if (!u.dx && !u.dy) {
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/teleport.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/teleport.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/teleport.c	2009-05-15 20:28:13.000000000 +0200
+@@ -471,7 +471,7 @@
+ 		else tele();
+ 		(void) next_to_u();
+ 	} else {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		return(0);
+ 	}
+ 	if (!trap) morehungry(100);
+@@ -533,7 +533,7 @@
+ 	     * we let negative values requests fall into the "heaven" loop.
+ 	     */
+ 	    if (Is_knox(&u.uz) && newlev > 0) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		return;
+ 	    }
+ 	    /* if in Quest, the player sees "Home 1", etc., on the status
+@@ -550,13 +550,13 @@
+  random_levtport:
+ 	    newlev = random_teleport_level();
+ 	    if (newlev == depth(&u.uz)) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		return;
+ 	    }
+ 	}
+ 
+ 	if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		return;
+ 	}
+ #ifdef WIZARD
+@@ -666,7 +666,7 @@
+ 	struct d_level target_level;
+ 
+ 	if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 		return;
+ 	}
+ 
+@@ -700,7 +700,7 @@
+ 			shieldeff(u.ux, u.uy);
+ 		You_feel("a wrenching sensation.");
+ 	} else if (!next_to_u()) {
+-		You(shudder_for_moment);
++		You("%s", shudder_for_moment);
+ 	} else if (trap->once) {
+ 		deltrap(trap);
+ 		newsym(u.ux,u.uy);	/* get rid of trap symbol */
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/timeout.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/timeout.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/timeout.c	2009-05-15 20:31:53.000000000 +0200
+@@ -30,7 +30,7 @@
+ 	register long i = (Stoned & TIMEOUT);
+ 
+ 	if(i > 0 && i <= SIZE(stoned_texts))
+-		pline(stoned_texts[SIZE(stoned_texts) - i]);
++		pline("%s", stoned_texts[SIZE(stoned_texts) - i]);
+ 	if(i == 5)
+ 		HFast = 0L;
+ 	if(i == 3)
+@@ -54,7 +54,7 @@
+ 
+ 	if ((((Vomiting & TIMEOUT) % 3L) == 2) && (i >= 0)
+ 	    && (i < SIZE(vomiting_texts)))
+-		You(vomiting_texts[SIZE(vomiting_texts) - i - 1]);
++		You("%s", vomiting_texts[SIZE(vomiting_texts) - i - 1]);
+ 
+ 	switch ((int) i) {
+ 	case 0:
+@@ -101,7 +101,7 @@
+ 		if (index(str, '%'))
+ 		    pline(str, hcolor(blue));
+ 		else
+-		    pline(str);
++		    pline("%s", str);
+ 	    }
+ 	}
+ 	exercise(A_STR, FALSE);
+@@ -131,7 +131,7 @@
+ 		} else
+ 		    pline(str, an(Hallucination ? rndmonnam() : "green slime"));
+ 	    } else
+-		pline(str);
++		pline("%s", str);
+ 	}
+ 	if(i == 4)
+ 	    HFast = 0;
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/trap.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/trap.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/trap.c	2009-05-15 20:33:44.000000000 +0200
+@@ -350,7 +350,7 @@
+ 	    dont_fall = "are jerked back by your pet!";
+ 	}
+ 	if (dont_fall) {
+-	    You(dont_fall);
++	    You("%s", dont_fall);
+ 	    /* hero didn't fall through, but any objects here might */
+ 	    impact_drop((struct obj *)0, u.ux, u.uy, 0);
+ 	    if (!td) {
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/zap.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/zap.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/zap.c	2009-05-15 20:36:44.000000000 +0200
+@@ -1657,7 +1657,7 @@
+ 	check_unpaid(obj);
+ 
+ 	/* zappable addition done by GAN 11/03/86 */
+-	if(!zappable(obj)) pline(nothing_happens);
++	if(!zappable(obj)) pline("%s", nothing_happens);
+ 	else if(obj->cursed && !rn2(100)) {
+ 		backfire(obj);	/* the wand blows up in your face! */
+ 		exercise(A_STR, FALSE);
+@@ -2166,7 +2166,7 @@
+ 	case SPE_STONE_TO_FLESH:
+ 	    if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+ 		     Underwater || (Is_qstart(&u.uz) && u.dz < 0)) {
+-		pline(nothing_happens);
++		pline("%s", nothing_happens);
+ 	    } else if (u.dz < 0) {	/* we should do more... */
+ 		pline("Blood drips on your %s.", body_part(FACE));
+ 	    } else if (u.dz > 0 && !OBJ_AT(u.ux, u.uy)) {
+@@ -3327,7 +3327,7 @@
+ 		    if (ttmp) ttmp->tseen = 1;
+ 		    if (cansee(x,y)) msgtxt = "The water evaporates.";
+ 		}
+-		Norep(msgtxt);
++		Norep("%s", msgtxt);
+ 		if (lev->typ == ROOM) newsym(x,y);
+ 	    } else if(IS_FOUNTAIN(lev->typ)) {
+ 		    if (cansee(x,y))
+@@ -3450,12 +3450,12 @@
+ 		    lev->doormask = new_doormask;
+ 		    unblock_point(x, y);	/* vision */
+ 		    if (cansee(x, y)) {
+-			pline(see_txt);
++			pline("%s", see_txt);
+ 			newsym(x, y);
+ 		    } else if (sense_txt) {
+-			You(sense_txt);
++			You("%s", sense_txt);
+ 		    } else if (hear_txt) {
+-			if (flags.soundok) You_hear(hear_txt);
++			if (flags.soundok) You_hear("%s", hear_txt);
+ 		    }
+ 		    if (picking_at(x, y)) {
+ 			stop_occupation();
+@@ -3824,7 +3824,7 @@
+ 	if (!otmp) {
+ 	    pline("Nothing fitting that description exists in the game.");
+ 	    if (++tries < 5) goto retry;
+-	    pline(thats_enough_tries);
++	    pline("%s", thats_enough_tries);
+ 	    if (!(otmp = readobjnam((char *)0)))
+ 		return; /* for safety; should never happen */
+ 	}
+Index: nethack_falconseye-3.3.1_jtp_1.9.3/src/version.c
+===================================================================
+--- nethack_falconseye-3.3.1_jtp_1.9.3/src/version.c
++++ nethack_falconseye-3.3.1_jtp_1.9.3/src/version.c	2009-05-15 20:38:57.000000000 +0200
+@@ -27,7 +27,7 @@
+ {
+ 	char buf[BUFSZ];
+ 
+-	pline(getversionstring(buf));
++	pline("%s", getversionstring(buf));
+ 	return 0;
+ }
+ 
