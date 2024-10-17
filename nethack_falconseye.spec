@@ -25,7 +25,7 @@ Source11: nethack.32.png
 Source12: nethack.48.png
 Patch0: nethack_falconseye-331_jtp_19-make-it-work.patch
 Patch1:	nethack_falconseye-3.3.1-fix-str-fmt.patch
-URL: http://www.hut.fi/~jtpelto2/nethack.html
+URL: https://www.hut.fi/~jtpelto2/nethack.html
 BuildRequires: byacc flex tetex-latex tetex-dvips
 BuildRequires: libSDL-devel libxaw-devel ncurses-devel popt-devel 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
